@@ -659,6 +659,20 @@ services:
       - jaeger
     logging: *logging
 
+  # FluentBit
+  fluentbit:
+    image: fluent/fluent-bit:2.0.10
+    container_name: fluentbit
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+    restart: unless-stopped
+    volumes:
+      - ./src/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    depends_on:
+      - otelcol
+
   # Prometheus
   prometheus:
     image: quay.io/prometheus/prometheus:v2.34.0

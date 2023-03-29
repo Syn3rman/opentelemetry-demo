@@ -23,10 +23,11 @@ receivers:
             - "https://*"
 
 exporters:
-  otlp:
-    endpoint: "jaeger:4317"
+  otlphttp:
+    endpoint: "http://fluentbit:8080"
     tls:
       insecure: true
+    compression: none
   logging:
   prometheus:
     endpoint: "otelcol:9464"
@@ -55,12 +56,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [spanmetrics, batch]
-      exporters: [otlp, logging]
+      exporters: [otlphttp, logging]
     metrics:
       receivers: [otlp]
       processors: [filter, transform, batch]
-      exporters: [prometheus, logging]
+      exporters: [otlphttp, prometheus, logging]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging]
+      exporters: [otlphttp, logging]
